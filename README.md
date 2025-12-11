@@ -20,6 +20,7 @@
 - [API Reference](#-api-reference)
 - [Testing](#-testing)
 - [Known Limitations](#-known-limitations)
+- [AI Usage & Development Process](#-ai-usage--development-process)
 
 ---
 
@@ -332,6 +333,46 @@ The database comes pre-loaded with **10 listings**:
 | Safety Equipment | Other | Australia | $500/set |
 | Carbon Fiber Rolls | Raw Material | Germany | RFQ |
 | Quality Inspection | Service | Singapore | $200/inspection |
+
+---
+
+## 🤖 AI Usage & Development Process
+
+### How AI Was Used
+
+This project was built with significant assistance from **GitHub Copilot (Claude Opus 4.5)**. AI was used throughout the development process for:
+
+- **Project scaffolding** - Setting up Next.js 16 with App Router, TypeScript, Prisma, and NextAuth v5
+- **Code generation** - Creating CRUD operations, form handling, server actions, and API routes
+- **Database schema design** - Designing the User, Listing, and Request models with proper relationships
+- **Validation schemas** - Writing Zod validators for forms and API inputs
+- **Styling** - Implementing gradient designs, card layouts, and responsive components
+- **Debugging** - Identifying and fixing TypeScript errors, auth issues, and deployment problems
+- **Documentation** - Generating this README with comprehensive setup instructions
+
+### How I Checked for Mistakes
+
+1. **TypeScript strict mode** - The project uses strict TypeScript to catch type errors at compile time
+2. **Zod validation** - All user inputs are validated with Zod schemas (16 unit tests passing)
+3. **Manual testing** - Each feature was tested manually through the UI after implementation
+4. **Error checking** - Used VS Code's error panel and `get_errors` to verify no TypeScript/lint errors
+5. **Code review** - All AI-generated code was reviewed for:
+   - Correct TypeScript types and null handling
+   - Proper authentication checks and ownership verification
+   - Following Next.js App Router conventions and best practices
+   - Security considerations (password hashing, protected routes, input validation)
+
+### Known Bugs & Limitations
+
+| Bug/Limitation | Description | Severity |
+|----------------|-------------|----------|
+| No real-time updates | Pages require manual refresh to see status changes | Low |
+| No pagination | All listings/requests shown on single page | Medium |
+| Category filter requires JS | Auto-submit uses JavaScript (noscript fallback provided) | Low |
+| Session delay after register | User must login after registration (no auto-login) | Low |
+| No image uploads | Listings don't support product images | Medium |
+| No email notifications | Status changes are not emailed to users | Low |
+| SQLite in dev, PostgreSQL in prod | Different database providers may cause edge-case differences | Low |
 
 ---
 
