@@ -1,0 +1,80 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// Note: SQLite doesn't support enums, so we use String fields
+// and validate with Zod on the application level
+// For PostgreSQL, you can define proper enums
+
+model User {
+  id             String    @id @default(cuid())
+  name           String
+  email          String    @unique
+  hashedPassword String
+  role           String    // "buyer" | "supplier"
+  createdAt      DateTime  @default(now())
+  
+  // Relations
+  listings       Listing[]
+  buyerRequests  Request[] @relation("BuyerRequests")
+  supplierRequests Request[] @relation("SupplierRequests")
+
+  @@index([email])
+  @@index([role])
+}
+
+model Listing {
+  id                 String   @id @default(cuid())
+  supplierId         String
+  supplier           User     @relation(fields: [supplierId], references: [id], onDelete: Cascade)
+  isActive           Boolean  @default(true)
+  category           String   // "raw_material" | "service" | "other"
+  name               String
+  description        String   @default("")
+  quantityAvailable  Int
+  unit               String   // "kg" | "ton" | "litre" | "unit"
+  locationCountry    String
+  pricingMode        String   // "fixed" | "rfq_only"
+  unitPrice          Decimal? // null if rfq_only
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  // Relations
+  requests           Request[]
+
+  @@index([supplierId])
+  @@index([category])
+  @@index([isActive])
+}
+
+model Request {
+  id                   String   @id @default(cuid())
+  listingId            String
+  listing              Listing  @relation(fields: [listingId], references: [id], onDelete: Cascade)
+  buyerId              String
+  buyer                User     @relation("BuyerRequests", fields: [buyerId], references: [id], onDelete: Cascade)
+  supplierId           String
+  supplier             User     @relation("SupplierRequests", fields: [supplierId], references: [id], onDelete: Cascade)
+  requestedQuantity    Int
+  message              String?
+  status               String   @default("pending") // "pending" | "accepted" | "rejected"
+  pricingModeSnapshot  String   // "fixed" | "rfq_only"
+  unitPriceSnapshot    Decimal? // null if rfq_only
+  totalAmount          Decimal? // null if rfq_only
+  paymentStatus        String   @default("unpaid") // "unpaid" | "marked_paid"
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
+
+  @@index([listingId])
+  @@index([buyerId])
+  @@index([supplierId])
+  @@index([status])
+}
