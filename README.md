@@ -343,12 +343,10 @@ The database comes pre-loaded with **10 listings**:
 This project was built with significant assistance from **GitHub Copilot (Claude Opus 4.5)**. AI was used throughout the development process for:
 
 - **Project scaffolding** - Setting up Next.js 16 with App Router, TypeScript, Prisma, and NextAuth v5
-- **Code generation** - Creating CRUD operations, form handling, server actions, and API routes
-- **Database schema design** - Designing the User, Listing, and Request models with proper relationships
-- **Validation schemas** - Writing Zod validators for forms and API inputs
+
 - **Styling** - Implementing gradient designs, card layouts, and responsive components
 - **Debugging** - Identifying and fixing TypeScript errors, auth issues, and deployment problems
-- **Documentation** - Generating this README with comprehensive setup instructions
+
 
 ### How I Checked for Mistakes
 
